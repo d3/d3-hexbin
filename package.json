@@ -17,17 +17,17 @@
     "url": "https://github.com/xaranke/d3-hexbin.git"
   },
   "scripts": {
-    "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -g d3-arrays:d3_arrays -u d3-hexbin -n d3_hexbin -o build/d3-hexbin.js -- build/bundle.js",
+    "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -g d3-array:d3_array -u d3-hexbin -n d3_hexbin -o build/d3-hexbin.js -- build/bundle.js",
     "test": "faucet `find test -name '*-test.js'`",
     "prepublish": "npm run test && uglifyjs build/d3-hexbin.js -c -m -o build/d3-hexbin.min.js && rm -f build/d3-hexbin.zip && zip -j build/d3-hexbin.zip -- LICENSE README.md build/d3-hexbin.js build/d3-hexbin.min.js"
+  },
+  "dependencies": {
+    "d3-array": "~0.5.1"
   },
   "devDependencies": {
     "faucet": "0.0",
     "rollup": "0.20.5",
     "tape": "4",
     "uglify-js": "2"
-  },
-  "dependencies": {
-    "d3-arrays": "^0.4.0"
   }
 }

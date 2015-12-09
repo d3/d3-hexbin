@@ -1,15 +1,15 @@
-import {range} from 'd3-arrays';
+import {range} from "d3-array";
+
+var hexbinAngles = range(0, 2 * Math.PI, Math.PI / 3),
+    hexbinX = function(d) { return d[0]; },
+    hexbinY = function(d) { return d[1]; };
 
 export default function() {
-  var d3_hexbinAngles = range(0, 2 * Math.PI, Math.PI / 3),
-    d3_hexbinX = function(d) { return d[0]; },
-    d3_hexbinY = function(d) { return d[1]; };
-
   var width = 1,
       height = 1,
       r,
-      x = d3_hexbinX,
-      y = d3_hexbinY,
+      x = hexbinX,
+      y = hexbinY,
       dx,
       dy;
 
@@ -45,7 +45,7 @@ export default function() {
 
   function hexagon(radius) {
     var x0 = 0, y0 = 0;
-    return d3_hexbinAngles.map(function(angle) {
+    return hexbinAngles.map(function(angle) {
       var x1 = Math.sin(angle) * radius,
           y1 = -Math.cos(angle) * radius,
           dx = x1 - x0,
