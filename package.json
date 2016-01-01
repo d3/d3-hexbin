@@ -1,6 +1,6 @@
 {
   "name": "d3-hexbin",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Visualize hexagonal binning",
   "keywords": [
     "d3",
@@ -11,10 +11,10 @@
   "license": "BSD-3-Clause",
   "main": "build/d3-hexbin.js",
   "jsnext:main": "index",
-  "homepage": "https://github.com/xaranke/d3-hexbin",
+  "homepage": "https://github.com/d3/d3-hexbin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xaranke/d3-hexbin.git"
+    "url": "https://github.com/d3/d3-hexbin.git"
   },
   "scripts": {
     "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -g d3-array:d3_array -u d3-hexbin -n d3_hexbin -o build/d3-hexbin.js -- build/bundle.js",

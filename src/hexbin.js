@@ -1,4 +1,4 @@
-import {range} from "d3-array";
+import {range, values} from "d3-array";
 
 var hexbinAngles = range(0, 2 * Math.PI, Math.PI / 3),
     hexbinX = function(d) { return d[0]; },
@@ -40,7 +40,7 @@ export default function() {
       }
     });
 
-    return d3.values(binsById);
+    return values(binsById);
   }
 
   function hexagon(radius) {
