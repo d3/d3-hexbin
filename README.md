@@ -1,70 +1,98 @@
 # d3-hexbin
 
-Visualize hexagonal binning.
+Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points and show the distribution using color or area.
 
 ## Installing
 
-If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest).
+If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-hexbin.v0.2.min.js) or as part of [D3 4.0 alpha](https://github.com/mbostock/d3/tree/4). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_hexbin` global is exported:
 
-## Demo
-Here is an example donated by [micahstubbs](https://github.com/micahstubbs) [recreated with d3-hexbin](http://bl.ocks.org/xaranke/b956ee7215b7b50bc78a).
+```html
+<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+<script>
 
-Clone or download the block, then run `npm install` and `npm run build` to create `d3.min.js`.  
+var hexbin = d3_hexbin.hexbin();
+
+</script>
+```
+
+[Try d3-hexbin in your browser.](https://tonicdev.com/npm/d3-hexbin)
 
 ## API Reference
 
-The **d3.hexbin** plugin implements **hexagonal binning**, which is useful for aggregating data into a more coarse representation suitable for display. Rather than displaying a scatterplot with tens of thousands of points, you can bin points into gridded hexagons, and then display the distribution using color or area. This plugin was inspired by earlier work by [Zachary Forest Johnson](http://indiemaps.com/blog/2011/10/hexbins/).
-
 <a name="hexbin" href="#hexbin">#</a> d3.<b>hexbin</b>()
 
-Constructs a new default hexbin layout.
+Constructs a new default hexbin generator.
 
 <a name="_hexbin" href="#_hexbin">#</a> <b>hexbin</b>(<i>points</i>)
 
-Evaluates the hexbin layout on the specified array of *points*, returning an array of hexagonal *bins*. Each bin is an array containing the bin’s points, as well as some additional properties:
+Bins the specified array of *points*, returning an array of hexagonal *bins*. For each point in the specified *points* array, the [*x*-](#hexbin_x) and [*y*-](#hexbin_y)accessors are invoked to compute the *x*- and *y*-coordinates of the point, which is then used to determine which hexagonal bin to add the point. If either the *x*- or *y*-coordinate is NaN, the point is ignored and will not be in any of the returned bins. This method ignores the hexbin’s [extent](#hexbin_extent); it may return bins outside the extent if necessary to contain the specified points.
 
-* x - the x-coordinate of the center of the associated bin’s hexagon
-* y - the y-coordinate of the center of the associated bin’s hexagon
+Each bin in the returned array is an array containing the bin’s points. Only non-empty bins are returned; empty bins without points are not included in the returned array. Each bin has these additional properties:
 
-Bins that are empty are not omitted. The origin bin at ⟨0,0⟩ is in the top-left. The returned bins are designed to work with the layouts point and hexagon methods.
+* `x` - the *x*-coordinate of the center of the associated bin’s hexagon
+* `y` - the *y*-coordinate of the center of the associated bin’s hexagon
 
-<a href="size" href="#size">#</a> hexbin.<b>size</b>([<i>size</i>])
-
-If *size* is specified, sets the available layout size to the specified two-element array of numbers representing *x* and *y*. If *size* is not specified, returns the current size, which defaults to 1×1.
-
-<a href="radius" href="#radius">#</a> hexbin.<b>radius</b>([<i>radius</i>])
-
-If *radius* is specified, sets the hexagon radius to the specified numeric value. If *radius* is not specified, returns the current radius, which defaults to 1.
-
-<a name="x" href="#x">#</a> hexbin.<b>x</b>([<i>accessor</i>])
-
-Sets or gets the *x*-accessor function for the hexbin layout. If *accessor* is specified, sets the *x*-accessor function and returns the hexbin layout; if *accessor* is not specified, returns the current *x*-accessor function, which defaults to `function(d) { return d[0]; }`.
-
-<a name="y" href="#y">#</a> hexbin.<b>y</b>([<i>accessor</i>])
-
-Sets or gets the *y*-accessor function for the hexbin layout. If *accessor* is specified, sets the *y*-accessor function and returns the hexbin layout; if *accessor* is not specified, returns the current *y*-accessor function, which defaults to `function(d) { return d[1]; }`.
-
-<a href="hexagon" href="#hexagon">#</a> hexbin.<b>hexagon</b>([<i>radius</i>])
-
-Returns the SVG path string for the hexagon centered at the origin ⟨0,0⟩. The path string is defined with relative coordinates such that you can easily translate the hexagon to the desired position. For example:
+These *x*- and *y*-coordinates of the hexagon center can be used to render the hexagon at the appropriate location in conjunction with [*hexbin*.hexagon](#hexbin_hexagon). For example:
 
 ```js
-path.attr("d", function(d) { return "M" + d.x + "," + d.y + hexbin.hexagon(); });
+svg.selectAll("path")
+    .data(hexbin(points))
+  .enter().append("path")
+    .attr("d", function(d) { return "M" + d.x + "," + d.y + hexbin.hexagon(); });
 ```
 
-Alternatively, use a transform attribute:
+Alternatively, using a transform:
 
 ```js
-path.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+svg.selectAll("path")
+    .data(hexbin(points))
+  .enter().append("path")
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     .attr("d", hexbin.hexagon());
 ```
 
-If *radius* is not specified, the hexbin’s current radius is used. If *radius* is specified, a hexagon with the specified radius is returned, which is useful for area-encoded bivariate hexbins.
+<a href="hexagon" href="#hexagon">#</a> hexbin.<b>hexagon</b>([<i>radius</i>])
+
+Returns the SVG path string for the hexagon centered at the origin ⟨0,0⟩. The path string is defined with relative coordinates such that you can easily translate the hexagon to the desired position.
+
+If *radius* is not specified, the hexbin’s [current radius](#hexbin_radius) is used. If *radius* is specified, a hexagon with the specified radius is returned; this is useful for area-encoded bivariate hexbins.
 
 <a href="centers" href="#centers">#</a> hexbin.<b>centers</b>()
 
-Returns an array of [*x*, *y*] points representing the centers of each hexagon. Each point also has properties *i* and *j* representing the grid column and row, respectively, of the hexagon.
+Returns an array of [*x*, *y*] points representing the centers of every hexagon in the [extent](#hexagon_extent).
 
 <a href="mesh" href="#mesh">#</a> hexbin.<b>mesh</b>()
 
-Returns the SVG path string for a hexagonal mesh that covers the area of the layout (as determined by the layout size). The returned mesh is designed to be stroked. The mesh may extend slightly beyond the layout’s defined area, and thus may need to be clipped.
+Returns an SVG path string representing the hexagonal mesh that covers the [extent](#hexagon_extent); the returned path is intended to be stroked. The mesh may extend slightly beyond the extent and may need to be clipped.
+
+<a name="x" href="#x">#</a> hexbin.<b>x</b>([<i>x</i>])
+
+If *x* is specified, sets the *x*-coordinate accessor to the specified function and returns this hexbin generator. If *x* is not specified, returns the current *x*-coordinate accessor, which defaults to:
+
+```js
+function x(d) {
+  return d[0];
+}
+```
+
+The *x*-coordinate accessor is used by [*hexbin*](#_hexbin) to compute the *x*-coordinate of each point. The default value assumes each point is specified as a two-element array of numbers [*x*, *y*].
+
+<a name="y" href="#y">#</a> hexbin.<b>y</b>([<i>x</i>])
+
+If *y* is specified, sets the *y*-coordinate accessor to the specified function and returns this hexbin generator. If *y* is not specified, returns the current *y*-coordinate accessor, which defaults to:
+
+```js
+function y(d) {
+  return d[1];
+}
+```
+
+The *y*-coordinate accessor is used by [*hexbin*](#_hexbin) to compute the *y*-coordinate of each point. The default value assumes each point is specified as a two-element array of numbers [*x*, *y*].
+
+<a href="radius" href="#radius">#</a> hexbin.<b>radius</b>([<i>radius</i>])
+
+If *radius* is specified, sets the radius of the hexagon to the specified number. If *radius* is not specified, returns the current radius, which defaults to 1. The hexagons are pointy-topped (rather than flat-topped); the width of each hexagon is *radius* × 2 × sin(π / 3) and the height of each hexagon is *radius* × 3 / 2.
+
+<a href="extent" href="#extent">#</a> hexbin.<b>extent</b>([<i>extent</i>])
+
+If *extent* is specified, sets the hexbin generator’s extent to the specified bounds [[*x0*, *y0*], [*x1*, *y1*]] and returns the hexbin generator. If *extent* is not specified, returns the generator’s current extent [[*x0*, *y0*], [*x1*, *y1*]], where *x0* and *y0* are the lower bounds and *x1* and *y1* are the upper bounds. The extent defaults to [[0, 0], [1, 1]].

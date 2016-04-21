@@ -1,24 +1,37 @@
-import {range, values} from "d3-array";
+var thirdPi = Math.PI / 3,
+    angles = [0, thirdPi, 2 * thirdPi, 3 * thirdPi, 4 * thirdPi, 5 * thirdPi];
 
-var hexbinAngles = range(0, 2 * Math.PI, Math.PI / 3),
-    hexbinX = function(d) { return d[0]; },
-    hexbinY = function(d) { return d[1]; };
+function pointX(d) {
+  return d[0];
+}
+
+function pointY(d) {
+  return d[1];
+}
 
 export default function() {
-  var width = 1,
-      height = 1,
+  var x0 = 0,
+      y0 = 0,
+      x1 = 1,
+      y1 = 1,
+      x = pointX,
+      y = pointY,
       r,
-      x = hexbinX,
-      y = hexbinY,
       dx,
       dy;
 
   function hexbin(points) {
-    var binsById = {};
+    var binsById = {}, bins = [], i, n = points.length;
 
-    points.forEach(function(point, i) {
-      var py = y.call(hexbin, point, i) / dy, pj = Math.round(py),
-          px = x.call(hexbin, point, i) / dx - (pj & 1 ? .5 : 0), pi = Math.round(px),
+    for (i = 0; i < n; ++i) {
+      if (isNaN(px = +x.call(null, point = points[i], i, points))
+          || isNaN(py = +y.call(null, point, i, points))) continue;
+
+      var point,
+          px,
+          py,
+          pj = Math.round(py = py / dy),
+          pi = Math.round(px = px / dx - (pj & 1) / 2),
           py1 = py - pj;
 
       if (Math.abs(py1) * 3 > 1) {
@@ -31,21 +44,20 @@ export default function() {
       }
 
       var id = pi + "-" + pj, bin = binsById[id];
-      if (bin) bin.push(point); else {
-        bin = binsById[id] = [point];
-        bin.i = pi;
-        bin.j = pj;
-        bin.x = (pi + (pj & 1 ? 1 / 2 : 0)) * dx;
+      if (bin) bin.push(point);
+      else {
+        bins.push(bin = binsById[id] = [point]);
+        bin.x = (pi + (pj & 1) / 2) * dx;
         bin.y = pj * dy;
       }
-    });
+    }
 
-    return values(binsById);
+    return bins;
   }
 
   function hexagon(radius) {
     var x0 = 0, y0 = 0;
-    return hexbinAngles.map(function(angle) {
+    return angles.map(function(angle) {
       var x1 = Math.sin(angle) * radius,
           y1 = -Math.cos(angle) * radius,
           dx = x1 - x0,
@@ -55,31 +67,17 @@ export default function() {
     });
   }
 
-  hexbin.x = function(_) {
-    if (!arguments.length) return x;
-    x = _;
-    return hexbin;
-  };
-
-  hexbin.y = function(_) {
-    if (!arguments.length) return y;
-    y = _;
-    return hexbin;
-  };
-
   hexbin.hexagon = function(radius) {
-    if (arguments.length < 1) radius = r;
-    return "m" + hexagon(radius).join("l") + "z";
+    return "m" + hexagon(radius == null ? r : +radius).join("l") + "z";
   };
 
   hexbin.centers = function() {
-    var centers = [];
-    for (var y = 0, odd = false, j = 0; y < height + r; y += dy, odd = !odd, ++j) {
-      for (var x = odd ? dx / 2 : 0, i = 0; x < width + dx / 2; x += dx, ++i) {
-        var center = [x, y];
-        center.i = i;
-        center.j = j;
-        centers.push(center);
+    var centers = [],
+        j = Math.round(y0 / dy),
+        i = Math.round(x0 / dx);
+    for (var y = j * dy; y < y1 + r; y += dy, ++j) {
+      for (var x = i * dx + (j & 1) * dx / 2; x < x1 + dx / 2; x += dx) {
+        centers.push([x, y]);
       }
     }
     return centers;
@@ -90,18 +88,20 @@ export default function() {
     return hexbin.centers().map(function(p) { return "M" + p + "m" + fragment; }).join("");
   };
 
-  hexbin.size = function(_) {
-    if (!arguments.length) return [width, height];
-    width = +_[0], height = +_[1];
-    return hexbin;
+  hexbin.x = function(_) {
+    return arguments.length ? (x = _, hexbin) : x;
+  };
+
+  hexbin.y = function(_) {
+    return arguments.length ? (y = _, hexbin) : y;
   };
 
   hexbin.radius = function(_) {
-    if (!arguments.length) return r;
-    r = +_;
-    dx = r * 2 * Math.sin(Math.PI / 3);
-    dy = r * 1.5;
-    return hexbin;
+    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, hexbin) : r;
+  };
+
+  hexbin.extent = function(_) {
+    return arguments.length ? (x0 = +_[0][0], y0 = +_[0][1], x1 = +_[1][0], y1 = +_[1][1], hexbin) : [[x0, y0], [x1, y1]];
   };
 
   return hexbin.radius(1);
