@@ -1,6 +1,6 @@
 # d3-hexbin
 
-Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points and show the distribution using color or area.
+Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points into hexagons and show the distribution using color or area.
 
 ## Installing
 
@@ -25,7 +25,7 @@ Constructs a new default hexbin generator.
 
 <a name="_hexbin" href="#_hexbin">#</a> <b>hexbin</b>(<i>points</i>)
 
-Bins the specified array of *points*, returning an array of hexagonal *bins*. For each point in the specified *points* array, the [*x*-](#hexbin_x) and [*y*-](#hexbin_y)accessors are invoked to compute the *x*- and *y*-coordinates of the point, which is then used to determine which hexagonal bin to add the point. If either the *x*- or *y*-coordinate is NaN, the point is ignored and will not be in any of the returned bins. This method ignores the hexbin’s [extent](#hexbin_extent); it may return bins outside the extent if necessary to contain the specified points.
+Bins the specified array of *points*, returning an array of hexagonal *bins*. For each point in the specified *points* array, the [*x*-](#hexbin_x) and [*y*-](#hexbin_y)accessors are invoked to compute the *x*- and *y*-coordinates of the point, which is then used to determine which hexagonal bin to add the point. If either the *x*- or *y*-coordinate is NaN, the point is ignored and will not be in any of the returned bins.
 
 Each bin in the returned array is an array containing the bin’s points. Only non-empty bins are returned; empty bins without points are not included in the returned array. Each bin has these additional properties:
 
@@ -50,6 +50,8 @@ svg.selectAll("path")
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     .attr("d", hexbin.hexagon());
 ```
+
+This method ignores the hexbin’s [extent](#hexbin_extent); it may return bins outside the extent if necessary to contain the specified points.
 
 <a href="hexagon" href="#hexagon">#</a> hexbin.<b>hexagon</b>([<i>radius</i>])
 
