@@ -1,6 +1,6 @@
 {
   "name": "d3-hexbin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Group two-dimensional points into hexagonal bins.",
   "keywords": [
     "d3",
@@ -21,7 +21,7 @@
     "url": "https://github.com/d3/d3-hexbin.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && json2module package.json > build/package.js && rollup -f umd -n d3_hexbin -o build/d3-hexbin.js -- index.js",
+    "pretest": "rm -rf build && mkdir build && json2module package.json > build/package.js && rollup -f umd -n d3 -o build/d3-hexbin.js -- index.js",
     "test": "tape 'test/**/*-test.js' && eslint index.js src",
     "prepublish": "npm run test && uglifyjs build/d3-hexbin.js -c -m -o build/d3-hexbin.min.js",
     "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cp build/d3-hexbin.js ../d3.github.com/d3-hexbin.v0.2.js && cp build/d3-hexbin.min.js ../d3.github.com/d3-hexbin.v0.2.min.js && cd ../d3.github.com && git add d3-hexbin.v0.2.js d3-hexbin.v0.2.min.js && git commit -m \"d3-hexbin ${VERSION}\" && git push && cd - && zip -j build/d3-hexbin.zip -- LICENSE README.md build/d3-hexbin.js build/d3-hexbin.min.js"

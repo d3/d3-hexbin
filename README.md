@@ -2,6 +2,8 @@
 
 Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points into hexagons and show the distribution using color or area.
 
+[<img alt="Hexbin Random Distributions" src="https://cloud.githubusercontent.com/assets/156229/18386150/d162fb32-7649-11e6-97e0-36c1b459c61e.png" width="420" />](http://bl.ocks.org/syntagmatic/748b02519c942c5291f302e060315ad6)
+
 ## Installing
 
 If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-hexbin.v0.2.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_hexbin` global is exported:
