@@ -3,6 +3,7 @@
 Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points into hexagons and show the distribution using color or area.
 
 [<img alt="Hexbin Random Distributions" src="https://cloud.githubusercontent.com/assets/156229/18386150/d162fb32-7649-11e6-97e0-36c1b459c61e.png" width="420" />](http://bl.ocks.org/syntagmatic/748b02519c942c5291f302e060315ad6)
+[<img alt="Dynamic Hexbins" src="https://cloud.githubusercontent.com/assets/156229/18408131/41bd14c6-76db-11e6-9bb0-d4a393654fa7.gif" width="420" />](http://bl.ocks.org/syntagmatic/e7dc072643b1a5f121047280093f459e)
 
 ## Installing
 
