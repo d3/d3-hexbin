@@ -6,7 +6,7 @@ Hexagonal binning is useful for aggregating “big” data into a coarse, “sma
 
 ## Installing
 
-If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-hexbin.v0.2.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_hexbin` global is exported:
+If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-hexbin.v0.2.min.js). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_hexbin` global is exported:
 
 ```html
 <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
@@ -38,7 +38,7 @@ These *x*- and *y*-coordinates of the hexagon center can be used to render the h
 
 ```js
 svg.selectAll("path")
-    .data(hexbin(points))
+  .data(hexbin(points))
   .enter().append("path")
     .attr("d", function(d) { return "M" + d.x + "," + d.y + hexbin.hexagon(); });
 ```
@@ -47,7 +47,7 @@ Alternatively, using a transform:
 
 ```js
 svg.selectAll("path")
-    .data(hexbin(points))
+  .data(hexbin(points))
   .enter().append("path")
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     .attr("d", hexbin.hexagon());
