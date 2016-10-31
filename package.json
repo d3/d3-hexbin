@@ -4,6 +4,7 @@
   "description": "Group two-dimensional points into hexagonal bins.",
   "keywords": [
     "d3",
+    "d3-module",
     "hexbin",
     "hexagonal",
     "binning"
