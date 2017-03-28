@@ -1,6 +1,6 @@
 {
   "name": "d3-hexbin",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Group two-dimensional points into hexagonal bins.",
   "keywords": [
     "d3",
