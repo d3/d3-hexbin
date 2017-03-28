@@ -104,3 +104,12 @@ If *radius* is specified, sets the radius of the hexagon to the specified number
 <a name="hexbin_extent" href="#hexbin_extent">#</a> hexbin.<b>extent</b>([<i>extent</i>])
 
 If *extent* is specified, sets the hexbin generator’s extent to the specified bounds [[*x0*, *y0*], [*x1*, *y1*]] and returns the hexbin generator. If *extent* is not specified, returns the generator’s current extent [[*x0*, *y0*], [*x1*, *y1*]], where *x0* and *y0* are the lower bounds and *x1* and *y1* are the upper bounds. The extent defaults to [[0, 0], [1, 1]].
+
+<a name="hexbin_size" href="#hexbin_size">#</a> hexbin.<b>size</b>([<i>size</i>])
+
+If *size* is specified, sets the [extent](#hexbin_extent) to the specified bounds [[0, 0], [*dx*, *dy*]] and returns the hexbin generator. If *size* is not specified, returns the generator’s current size [*x1* - *x0*, *y1* - *y0*], where *x0* and *y0* are the lower bounds and *x1* and *y1* are the upper bounds. The size defaults to [1, 1]. This is a convenience method for setting the extent. For example, these two statements are equivalent:
+
+```js
+hexbin.extent([[0, 0], [width, height]]);
+hexbin.size([width, height]);
+```
