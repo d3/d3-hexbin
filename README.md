@@ -1,6 +1,6 @@
 # d3-hexbin
 
-Hexagonal binning is useful for aggregating “big” data into a coarse, “small” representation for display: rather than render a scatterplot of tens of thousands of points, bin the points into hexagons and show the distribution using color or area.
+Hexagonal binning is useful for aggregating data into a coarser representation for display. For example, rather than rendering a scatterplot of tens of thousands of points, bin the points into a few hundred hexagons to show the distribution. Hexbins can support a color encoding, area encoding, or both.
 
 [<img alt="Hexagonal Binning" src="https://raw.githubusercontent.com/d3/d3-hexbin/master/img/color.jpg" width="420" height="219">](https://bl.ocks.org/mbostock/4248145)[<img alt="Dynamic Hexbin" src="https://raw.githubusercontent.com/d3/d3-hexbin/master/img/dynamic.jpg" width="420" height="219">](https://bl.ocks.org/mbostock/7833311)
 
