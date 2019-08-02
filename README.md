@@ -61,6 +61,23 @@ svg.selectAll("path")
 
 This method ignores the hexbin’s [extent](#hexbin_extent); it may return bins outside the extent if necessary to contain the specified points.
 
+<a name="bins_add" href="#bins_add">#</a> <i>bins</i>.<b>add</b>(<i>point</i>)
+
+Adds a point and returns the bins.
+
+<a name="bins_addAll" href="#bins_addAll">#</a> <i>bins</i>.<b>addAll</b>(<i>points</i>)
+
+Adds points and returns the bins.
+
+<a name="bins_remove" href="#bins_remove">#</a> <i>bins</i>.<b>remove</b>(<i>point</i>)
+
+Removes the point (if it is referenced in its bin), and returns the bins. Empty bins are pruned.
+
+<a name="bins_removeAll" href="#bins_removeAll">#</a> <i>bins</i>.<b>removeAll</b>(<i>points</i>)
+
+Removes all the points from the bins, and returns the bins. Empty bins are pruned.
+
+
 <a name="hexbin_hexagon" href="#hexbin_hexagon">#</a> <i>hexbin</i>.<b>hexagon</b>([<i>radius</i>])
 
 Returns the SVG path string for the hexagon centered at the origin ⟨0,0⟩. The path string is defined with relative coordinates such that you can easily translate the hexagon to the desired position. If *radius* is not specified, the hexbin’s [current radius](#hexbin_radius) is used. If *radius* is specified, a hexagon with the specified radius is returned; this is useful for area-encoded bivariate hexbins.
@@ -97,9 +114,13 @@ function y(d) {
 
 The *y*-coordinate accessor is used by [*hexbin*](#_hexbin) to compute the *y*-coordinate of each point. The default value assumes each point is specified as a two-element array of numbers [*x*, *y*].
 
+<a name="hexbin_angle" href="#hexbin_angle">#</a> <i>hexbin</i>.<b>angle</b>([<i>angle</i>])
+
+If *angle* is specified, sets the angle of the hexagonal grid to the specified number, in degrees. If *angle* is not specified, returns the current angle, which defaults to pointy-topped hexagons.
+
 <a name="hexbin_radius" href="#hexbin_radius">#</a> <i>hexbin</i>.<b>radius</b>([<i>radius</i>])
 
-If *radius* is specified, sets the radius of the hexagon to the specified number. If *radius* is not specified, returns the current radius, which defaults to 1. The hexagons are pointy-topped (rather than flat-topped); the width of each hexagon is *radius* × 2 × sin(π / 3) and the height of each hexagon is *radius* × 3 / 2.
+If *radius* is specified, sets the radius of the hexagon to the specified number. If *radius* is not specified, returns the current radius, which defaults to 1. The width of each hexagon is *radius* × 2 × sin(π / 3) and the height of each hexagon is *radius* × 3 / 2.
 
 <a name="hexbin_extent" href="#hexbin_extent">#</a> hexbin.<b>extent</b>([<i>extent</i>])
 
@@ -113,3 +134,12 @@ If *size* is specified, sets the [extent](#hexbin_extent) to the specified bound
 hexbin.extent([[0, 0], [width, height]]);
 hexbin.size([width, height]);
 ```
+
+<a href="#hexbin_context" name="hexbin_context">#</a> <i>hexbin</i>.<b>context</b>([<i>context</i>]) [<>](https://github.com/d3/d3-hexbin/blob/master/src/hexbin.js "Source")
+
+If *context* is specified, sets the current render context and returns the hexbin. If the *context* is null, hexbin.mesh and hexbin.hexagon will return SVG path strings; if the context is non-null, hexbin.mesh and hexbin.hexagon will instead call methods on the specified context to render geometry. The context must implement the following subset of the [CanvasRenderingContext2D API](https://www.w3.org/TR/2dcontext/#canvasrenderingcontext2d):
+
+* *context*.moveTo(*x*, *y*)
+* *context*.lineTo(*x*, *y*)
+
+If a *context* is not specified, returns the current render context which defaults to null.

@@ -185,6 +185,39 @@ tape("hexbin.mesh() observes the extent", function(test) {
   test.end();
 });
 
+tape("hexbin.add() adds a point", function(test) {
+  var bins = d3.hexbin()([[0,0]]).addAll([[0.1,0.1], [10,10]]).add([2,2]),
+    expected = [[[0,0],[0.1,0.1]],[[10,10]],[[2,2]]];
+  test.equal(JSON.stringify(bins), JSON.stringify(expected));
+  test.end();
+});
+
+tape("hexbin.remove() removes a point", function(test) {
+  var points = [[0,0], [1,1], [2,2]];
+  var bins = d3.hexbin()(points).remove(points[1]),
+    expected = [ [[0,0]], [[2,2]] ];
+  test.equal(JSON.stringify(bins), JSON.stringify(expected));
+  test.end();
+});
+
+tape("hexbin.removeAll() removes several points", function(test) {
+  var points = [[0,0], [1,1], [2,2]];
+  var bins = d3.hexbin()(points).removeAll(points.slice(0,2)),
+    expected = [[[2,2]]];
+  test.equal(JSON.stringify(bins), JSON.stringify(expected));
+  test.end();
+});
+
+tape("hexbin.angle(…) returns the expected centers", function(test) {
+  test.deepEqual(d3.hexbin().radius(0.5).extent([[-1.1, -1.1], [1.1, 1.1]]).angle(90).centers().map(function(c) {
+    return c.map(function(p) { return +p.toFixed(4); })
+  }), [ [ -0.75, 0.433 ], [ -0.75, -0.433 ], [ -0.75, -1.299 ], [ 0, 0.866 ], [ 0, 0 ], [ 0, -0.866 ], [ 0.75, 0.433 ], [ 0.75, -0.433 ], [ 0.75, -1.299 ], [ 1.5, 0.866 ], [ 1.5, 0 ], [ 1.5, -0.866 ] ]);
+  test.deepEqual(d3.hexbin().radius(0.5).extent([[-1.1, -1.1], [1.1, 1.1]]).angle(45).centers().map(function(c) {
+    return c.map(function(p) { return +p.toFixed(4); })
+  }), [ [ -1.673, -0.4483 ], [ -1.0607, -1.0607 ], [ -0.4483, -1.673 ], [ -1.4489, 0.3882 ], [ -0.8365, -0.2241 ], [ -0.2241, -0.8365 ], [ 0.3882, -1.4489 ], [ -1.2247, 1.2247 ], [ -0.6124, 0.6124 ], [ 0, 0 ], [ 0.6124, -0.6124 ], [ 1.2247, -1.2247 ], [ -0.3882, 1.4489 ], [ 0.2241, 0.8365 ], [ 0.8365, 0.2241 ], [ 1.4489, -0.3882 ], [ 0.4483, 1.673 ], [ 1.0607, 1.0607 ], [ 1.673, 0.4483 ] ]);
+  test.end();
+});
+
 function noxy(bins) {
   return bins.map(function(bin) {
     return bin.slice();
