@@ -147,3 +147,9 @@ If *context* is specified, sets the current render context and returns the hexbi
 * *context*.lineTo(*x*, *y*)
 
 If a *context* is not specified, returns the current render context which defaults to null.
+
+
+<a href="#hexbin_data" name="hexbin_data">#</a> <i>hexbin</i>.<b>data</b>([<i>points</i>]) [<>](https://github.com/d3/d3-hexbin/blob/master/src/hexbin.js "Source")
+
+If *points* is specified, resets the hexbin with the new data points. If the *points* is null, returns the current data points, in a possibly different order.
+
