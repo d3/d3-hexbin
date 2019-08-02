@@ -153,3 +153,6 @@ If a *context* is not specified, returns the current render context which defaul
 
 If *points* is specified, resets the hexbin with the new data points. If the *points* is null, returns the current data points, in a possibly different order.
 
+<a href="#hexbin_bin" name="hexbin_bin">#</a> <i>hexbin</i>.<b>bin</b>(<i>point</i>) [<>](https://github.com/d3/d3-hexbin/blob/master/src/hexbin.js "Source")
+
+Returns the bin that would contain the point if we added it. If there is no such bin, returns an empty array with properties *x* and *y*. That bin is not guaranteed to keep in sync with data additions and removals, or changes of parameters such as radius, angle and translate.

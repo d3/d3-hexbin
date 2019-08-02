@@ -222,6 +222,20 @@ export default function() {
     return arguments.length ? (hexbin(_), hexbin) : data();
   }
 
+  hexbin.bin = function(point) {
+    var px, py;
+    if (isNaN(px = +x.call(null, point))
+        || isNaN(py = +y.call(null, point))) return;
+    var b = getBin(px, py), pi = b[0], pj = b[1], id = b[0] + "-" + b[1], bin = binsById[id];
+    if (!bin) {
+      bin = [];
+      var u = untransform((pi + (pj & 1) / 2) * dx, pj * dy);
+      bin.x = u[0];
+      bin.y = u[1];
+    }
+    return bin;
+  }
+
   bins.add = function(point) {
     var px, py;
     if (isNaN(px = +x.call(null, point))
