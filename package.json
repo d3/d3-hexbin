@@ -15,24 +15,30 @@
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
-  "main": "build/d3-hexbin.js",
-  "module": "index",
-  "jsnext:main": "index",
+  "main": "dist/d3-hexbin.js",
+  "unpkg": "dist/d3-hexbin.min.js",
+  "module": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-hexbin.git"
   },
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -f umd -n d3 -o build/d3-hexbin.js -- index.js",
-    "test": "tape 'test/**/*-test.js' && eslint index.js src",
-    "prepublish": "npm run test && uglifyjs --preamble \"$(preamble)\" build/d3-hexbin.js -c -m -o build/d3-hexbin.min.js",
-    "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3-hexbin/build/d3-hexbin.js d3-hexbin.v0.2.js && cp ../d3-hexbin/build/d3-hexbin.min.js d3-hexbin.v0.2.min.js && git add d3-hexbin.v0.2.js d3-hexbin.v0.2.min.js && git commit -m \"d3-hexbin ${npm_package_version}\" && git push && cd - && zip -j build/d3-hexbin.zip -- LICENSE README.md build/d3-hexbin.js build/d3-hexbin.min.js"
+    "test": "tape -r esm 'test/**/*-test.js' && eslint src",
+    "prepublishOnly": "rm -rf dist && yarn test && rollup -c && mkdir -p test/output && test/compare-images",
+    "postpublish": "git push && git push --tags && zip -j dist/${npm_package_name}.zip -- LICENSE README.md dist/${npm_package_name}.js dist/${npm_package_name}.min.js"
   },
   "devDependencies": {
-    "eslint": "3",
-    "package-preamble": "0.0",
-    "rollup": "0.41",
+    "canvas": "1",
+    "eslint": "6",
+    "eslint-plugin-es5": "1",
+    "esm": "3",
+    "rollup": "1",
+    "rollup-plugin-terser": "5",
     "tape": "4",
-    "uglify-js": "2"
+    "tape-await": "0.1"
   }
 }

@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+var width = 960,
+    height = 500,
+    Canvas = require("canvas"),
+    d3 = require("../");
+
+var canvas = new Canvas(width, height),
+    context = canvas.getContext("2d");
+
+var hexbin = d3.hexbin()
+               .radius(15)
+               .context(context)
+               .size([width, height]);
+
+const data = Array.from({length: 1000}, (_,i) => [
+  width * (i * 96.367866757 % 1),
+  Math.floor(i * 96.367866757) % height
+]);
+
+const bins = hexbin(data);
+
+
+context.fillStyle = "#fff";
+context.fillRect(0, 0, width, height);
+
+context.beginPath();
+hexbin.mesh();
+context.stroke();
+
+context.fillStyle = "#ddd";
+context.beginPath();
+for (var i = 0; i < bins.length; i++) {
+  var bin = bins[i];
+  hexbin.hexagon(6 * Math.sqrt(bin.length), [bin.x, bin.y]);
+}
+context.fill();
+  
+canvas.pngStream().pipe(process.stdout);

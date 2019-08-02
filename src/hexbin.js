@@ -144,15 +144,21 @@ export default function() {
     }
   }
 
-  hexbin.hexagon = function(radius) {
+  hexbin.hexagon = function(radius, translate) {
+    if (typeof radius == "object") {
+      var tmp = translate;
+      translate = radius;
+      radius = tmp;
+    }
     var points = hexagon(radius == null ? r : +radius);
     if (!context) {
       vectors(points);
-      return "m" + points.join("l") + "z";
+      return (translate ? "M" + translate : "") + "m" + points.join("l") + "z";
     }
-    context.moveTo(points[0][0], points[0][1]);
+    if (translate == null) translate = [0, 0];
+    context.moveTo(translate[0] + points[0][0], translate[1] + points[0][1]);
     for (var i = 1; i < 6; i++)
-      context.lineTo(points[i][0], points[i][1]);
+      context.lineTo(translate[0] + points[i][0], translate[1] + points[i][1]);
   };
 
   hexbin.centers = function() {
