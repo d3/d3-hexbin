@@ -195,15 +195,15 @@ export default function() {
   };
 
   hexbin.x = function(_) {
-    return arguments.length ? (x = _, hexbin) : x;
+    return arguments.length ? (x = _, rebin(), hexbin) : x;
   };
 
   hexbin.y = function(_) {
-    return arguments.length ? (y = _, hexbin) : y;
+    return arguments.length ? (y = _, rebin(), hexbin) : y;
   };
 
   hexbin.radius = function(_) {
-    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, hexbin) : r;
+    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, rebin(), hexbin) : r;
   };
 
   hexbin.size = function(_) {
