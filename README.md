@@ -116,7 +116,11 @@ The *y*-coordinate accessor is used by [*hexbin*](#_hexbin) to compute the *y*-c
 
 <a name="hexbin_angle" href="#hexbin_angle">#</a> <i>hexbin</i>.<b>angle</b>([<i>angle</i>])
 
-If *angle* is specified, sets the angle of the hexagonal grid to the specified number, in degrees. If *angle* is not specified, returns the current angle, which defaults to pointy-topped hexagons.
+If *angle* is specified, sets the angle of the hexagonal grid to the specified number, in degrees. If *angle* is not specified, returns the current angle, which defaults to 0 (pointy-topped hexagons).
+
+<a name="hexbin_translate" href="#hexbin_translate">#</a> <i>hexbin</i>.<b>translate</b>([<i>translate</i>])
+
+If *translate* is specified, translates the hexagonal grid to the specified value [tx, ty]. If *translate* is not specified, returns the current translate, which defaults to [0, 0].
 
 <a name="hexbin_radius" href="#hexbin_radius">#</a> <i>hexbin</i>.<b>radius</b>([<i>radius</i>])
 

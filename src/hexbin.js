@@ -19,6 +19,8 @@ export default function() {
       r,
       dx,
       dy,
+      tx = 0,
+      ty = 0,
       angle = 0,
       ca = 1,
       sa = 0,
@@ -28,6 +30,8 @@ export default function() {
 
   // from pixels to grid
   function transform(x, y) {
+    x -= tx;
+    y -= ty;
     if (ca === 1) return [x, y];
     return [x * ca - y * sa, x * sa + y * ca];
   }
@@ -35,7 +39,7 @@ export default function() {
   // from grid to pixels
   function untransform(x, y) {
     if (ca === 1) return [x, y];
-    return [x * ca + y * sa, - x * sa + y * ca];
+    return [x * ca + y * sa + tx, - x * sa + y * ca + ty];
   }
 
   function hexbin(points) {
@@ -105,8 +109,9 @@ export default function() {
   }
 
   function hexagon(radius) {
-    return angles.map(function(angle) {
-      return untransform( Math.sin(angle) * radius, -Math.cos(angle) * radius );
+    return angles.map(function(a) {
+      a -= angle / 180 * Math.PI;
+      return [ Math.sin(a) * radius, -Math.cos(a) * radius ];
     });
   }
   
@@ -143,7 +148,7 @@ export default function() {
 
     for (var y = j * dy; y < ty1 + r; y += dy, ++j) {
       for (var x = i * dx + (j & 1) * dx / 2; x < tx1 + dx / 2; x += dx) {
-        var [ux, uy] = untransform(x, y);
+        var u = untransform(x, y), ux = u[0], uy = u[1];
         if (ux >= x0 - dx && ux <= x1 + dx && uy >= y0 - dy && uy <= y1 + dy)
           centers.push([ux, uy]);
       }
@@ -169,6 +174,10 @@ export default function() {
 
   hexbin.angle = function(_) {
     return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), hexbin) : x;
+  };
+
+  hexbin.translate = function(_) {
+    return arguments.length ? (tx = _[0], ty = _[1], hexbin) : [tx, ty];
   };
 
   hexbin.x = function(_) {
