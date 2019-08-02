@@ -38,7 +38,7 @@ export default function() {
 
   // from grid to pixels
   function untransform(x, y) {
-    if (ca === 1) return [x, y];
+    if (ca === 1) return [x + tx, y + ty];
     return [x * ca + y * sa + tx, - x * sa + y * ca + ty];
   }
 
