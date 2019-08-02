@@ -108,6 +108,20 @@ export default function() {
     return bins;
   }
 
+  function data() {
+    var data = [];
+    bins.forEach(function(bin) {
+      bin.forEach(function(d) {
+        data.push(d);
+      });
+    });
+    return data;
+  }
+
+  function rebin() {
+     hexbin(data());
+  }
+
   function hexagon(radius) {
     return angles.map(function(a) {
       a -= angle / 180 * Math.PI;
@@ -173,11 +187,11 @@ export default function() {
   };
 
   hexbin.angle = function(_) {
-    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), hexbin) : x;
+    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), rebin(), hexbin) : angle;
   };
 
   hexbin.translate = function(_) {
-    return arguments.length ? (tx = _[0], ty = _[1], hexbin) : [tx, ty];
+    return arguments.length ? (tx = _[0], ty = _[1], rebin(), hexbin) : [tx, ty];
   };
 
   hexbin.x = function(_) {
