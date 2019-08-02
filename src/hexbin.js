@@ -218,6 +218,10 @@ export default function() {
     return arguments.length ? (context = _, hexbin) : context;
   }
 
+  hexbin.data = function(_) {
+    return arguments.length ? (hexbin(_), hexbin) : data();
+  }
+
   bins.add = function(point) {
     var px, py;
     if (isNaN(px = +x.call(null, point))
