@@ -165,8 +165,8 @@ export default function() {
         tx1 = Math.max(tx00, tx01, tx10, tx11),
         ty1 = Math.max(ty00, ty01, ty10, ty11),
         centers = [],
-        j = Math.round(ty0 / dy),
-        i = Math.round(tx0 / dx);
+        j = Math.floor(ty0 / dy),
+        i = Math.floor(tx0 / dx);
 
     for (var y = j * dy; y < ty1 + r; y += dy, ++j) {
       for (var x = i * dx + (j & 1) * dx / 2; x < tx1 + dx / 2; x += dx) {
