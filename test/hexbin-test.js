@@ -186,7 +186,7 @@ tape("hexbin.mesh() observes the extent", function(test) {
 });
 
 tape("hexbin.add() adds a point", function(test) {
-  var bins = d3.hexbin()([[0,0]]).addAll([[0.1,0.1], [10,10]]).add([2,2]),
+  var bins = d3.hexbin().add([0,0]).addAll([[0.1,0.1], [10,10]]).add([2,2])(),
     expected = [[[0,0],[0.1,0.1]],[[10,10]],[[2,2]]];
   test.equal(JSON.stringify(bins), JSON.stringify(expected));
   test.end();
@@ -194,17 +194,39 @@ tape("hexbin.add() adds a point", function(test) {
 
 tape("hexbin.remove() removes a point", function(test) {
   var points = [[0,0], [1,1], [2,2]];
-  var bins = d3.hexbin()(points).remove(points[1]),
+  var hexbin = d3.hexbin(),
     expected = [ [[0,0]], [[2,2]] ];
-  test.equal(JSON.stringify(bins), JSON.stringify(expected));
+  hexbin(points);
+  hexbin.remove(points[1]);
+  test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
+  test.end();
+});
+
+tape("hexbin.remove() doesn't remove a point that isn't there", function(test) {
+  var points = [[0,0], [1,1], [2,2]];
+  var hexbin = d3.hexbin(),
+    expected = [ [[0,0]], [[1,1]] ];
+  hexbin(points.slice(0,2));
+  hexbin.remove(points[2]);
+  test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
   test.end();
 });
 
 tape("hexbin.removeAll() removes several points", function(test) {
   var points = [[0,0], [1,1], [2,2]];
-  var bins = d3.hexbin()(points).removeAll(points.slice(0,2)),
+  var hexbin = d3.hexbin(),
     expected = [[[2,2]]];
-  test.equal(JSON.stringify(bins), JSON.stringify(expected));
+  hexbin(points);
+  hexbin.removeAll(points.slice(0,2));
+  test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
+  test.end();
+});
+
+tape("hexbin.removeAll() removes unbinned points", function(test) {
+  var points = [[0,0], [1,1], [2,2]];
+  var hexbin = d3.hexbin().addAll(points).removeAll(points.slice(0,2)),
+    expected = [[[2,2]]];
+  test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
   test.end();
 });
 

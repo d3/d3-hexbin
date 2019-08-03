@@ -26,7 +26,9 @@ export default function() {
       sa = 0,
       context = null,
       binsById = {},
-      bins = [];
+      bins = [],
+      unbinned = [],
+      dirty = false;
 
   // from pixels to grid
   function transform(x, y) {
@@ -43,9 +45,23 @@ export default function() {
   }
 
   function hexbin(points) {
-    binsById = {};
-    bins.splice(0, bins.length);
-    addAll(points);
+    if (points) {
+      binsById = {};
+      bins.splice(0, bins.length);
+      unbinned.splice(0, unbinned.length);
+      addAll(points);
+    } else if (dirty) {
+      bins.forEach(function(bin) {
+        bin.forEach(function(d) {
+          unbinned.push(d);
+        });
+      });
+      binsById = {};
+      bins.splice(0, bins.length);
+    }
+    addAll(unbinned);
+    unbinned.splice(0, unbinned.length);
+    dirty = false;
     return bins;
   }
 
@@ -93,33 +109,20 @@ export default function() {
     var px, py;
     if (isNaN(px = +x.call(null, point))
         || isNaN(py = +y.call(null, point))) return;
-    var b = getBin(px, py), id = b[0] + "-" + b[1], bin = binsById[id];
+    var b = getBin(px, py), id = b[0] + "-" + b[1], bin = binsById[id] || unbinned;
     if (bin) {
       var i = bin.indexOf(point);
       if (i > -1) {
         bin.splice(i, 1);
         if (bin.length == 0) {
           i = bins.indexOf(bin);
-          bins.splice(i, 1);
-          delete binsById[id];
+          if (i > -1) {
+            bins.splice(i, 1);
+            delete binsById[id];
+          }
         }
       }
     }
-    return bins;
-  }
-
-  function data() {
-    var data = [];
-    bins.forEach(function(bin) {
-      bin.forEach(function(d) {
-        data.push(d);
-      });
-    });
-    return data;
-  }
-
-  function rebin() {
-     hexbin(data());
   }
 
   function hexagon(radius) {
@@ -187,23 +190,23 @@ export default function() {
   };
 
   hexbin.angle = function(_) {
-    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), rebin(), hexbin) : angle;
+    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), dirty = true, hexbin) : angle;
   };
 
   hexbin.translate = function(_) {
-    return arguments.length ? (tx = _[0], ty = _[1], rebin(), hexbin) : [tx, ty];
+    return arguments.length ? (tx = _[0], ty = _[1], dirty = true, hexbin) : [tx, ty];
   };
 
   hexbin.x = function(_) {
-    return arguments.length ? (x = _, rebin(), hexbin) : x;
+    return arguments.length ? (x = _, dirty = true, hexbin) : x;
   };
 
   hexbin.y = function(_) {
-    return arguments.length ? (y = _, rebin(), hexbin) : y;
+    return arguments.length ? (y = _, dirty = true, hexbin) : y;
   };
 
   hexbin.radius = function(_) {
-    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, rebin(), hexbin) : r;
+    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, dirty = true, hexbin) : r;
   };
 
   hexbin.size = function(_) {
@@ -216,10 +219,6 @@ export default function() {
 
   hexbin.context = function(_) {
     return arguments.length ? (context = _, hexbin) : context;
-  }
-
-  hexbin.data = function(_) {
-    return arguments.length ? (hexbin(_), hexbin) : data();
   }
 
   hexbin.bin = function(point) {
@@ -236,24 +235,28 @@ export default function() {
     return bin;
   }
 
-  bins.add = function(point) {
-    var px, py;
-    if (isNaN(px = +x.call(null, point))
-        || isNaN(py = +y.call(null, point))) return;
-    addOne(point, px, py);
-    return bins;
+  hexbin.add = function(point) {
+    unbinned.push(point);
+    dirty = true;
+    return hexbin;
   }
 
-  bins.addAll = function(points) {
-    addAll(points);
-    return bins;
+  hexbin.addAll = function(points) {
+    points.forEach(function(point) {
+      unbinned.push(point);
+    });
+    dirty = true;
+    return hexbin;
   }
 
-  bins.remove = remove;
+  hexbin.remove = function(point) {
+    remove(point);
+    return hexbin;
+  }
 
-  bins.removeAll = function(points) {
+  hexbin.removeAll = function(points) {
     for (var i = 0, l = points.length; i < l; i++) remove(points[i]);
-    return bins;
+    return hexbin;
   }
 
   return hexbin.radius(1);

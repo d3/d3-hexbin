@@ -61,22 +61,21 @@ svg.selectAll("path")
 
 This method ignores the hexbin’s [extent](#hexbin_extent); it may return bins outside the extent if necessary to contain the specified points.
 
-<a name="bins_add" href="#bins_add">#</a> <i>bins</i>.<b>add</b>(<i>point</i>)
+<a name="hexbin_add" href="#hexbin_add">#</a> <i>hexbin</i>.<b>add</b>(<i>point</i>)
 
-Adds a point and returns the bins.
+Adds the *point* and returns the hexbin generator.
 
-<a name="bins_addAll" href="#bins_addAll">#</a> <i>bins</i>.<b>addAll</b>(<i>points</i>)
+<a name="hexbin_addAll" href="#hexbin_addAll">#</a> <i>hexbin</i>.<b>addAll</b>(<i>points</i>)
 
-Adds points and returns the bins.
+Adds the *points* and returns the hexbin generator.
 
-<a name="bins_remove" href="#bins_remove">#</a> <i>bins</i>.<b>remove</b>(<i>point</i>)
+<a name="hexbin_remove" href="#hexbin_remove">#</a> <i>hexbin</i>.<b>remove</b>(<i>point</i>)
 
-Removes the point (if it is referenced in its bin), and returns the bins. Empty bins are pruned.
+Removes the *point*, and returns the hexbin generator. Empty bins are pruned.
 
-<a name="bins_removeAll" href="#bins_removeAll">#</a> <i>bins</i>.<b>removeAll</b>(<i>points</i>)
+<a name="hexbin_removeAll" href="#hexbin_removeAll">#</a> <i>hexbin</i>.<b>removeAll</b>(<i>points</i>)
 
-Removes all the points from the bins, and returns the bins. Empty bins are pruned.
-
+Removes all the *points* and returns the hexbin generator. Empty bins are pruned.
 
 <a name="hexbin_hexagon" href="#hexbin_hexagon">#</a> <i>hexbin</i>.<b>hexagon</b>([<i>radius</i>])
 
@@ -148,10 +147,6 @@ If *context* is specified, sets the current render context and returns the hexbi
 
 If a *context* is not specified, returns the current render context which defaults to null.
 
-
-<a href="#hexbin_data" name="hexbin_data">#</a> <i>hexbin</i>.<b>data</b>([<i>points</i>]) [<>](https://github.com/d3/d3-hexbin/blob/master/src/hexbin.js "Source")
-
-If *points* is specified, resets the hexbin with the new data points. If the *points* is null, returns the current data points, in a possibly different order.
 
 <a href="#hexbin_bin" name="hexbin_bin">#</a> <i>hexbin</i>.<b>bin</b>(<i>point</i>) [<>](https://github.com/d3/d3-hexbin/blob/master/src/hexbin.js "Source")
 
