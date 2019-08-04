@@ -105,21 +105,26 @@ export default function() {
     }
   }
 
+  function removeFromBin(point, bin) {
+    var i = bin.indexOf(point);
+    if (i > -1) {
+      bin.splice(i, 1);
+    }
+  }
+
   function remove(point) {
     var px, py;
     if (isNaN(px = +x.call(null, point))
         || isNaN(py = +y.call(null, point))) return;
-    var b = getBin(px, py), id = b[0] + "-" + b[1], bin = binsById[id] || unbinned;
+    var b = getBin(px, py), id = b[0] + "-" + b[1], bin = binsById[id];
+    removeFromBin(point, unbinned);
     if (bin) {
-      var i = bin.indexOf(point);
-      if (i > -1) {
-        bin.splice(i, 1);
-        if (bin.length == 0) {
-          i = bins.indexOf(bin);
-          if (i > -1) {
-            bins.splice(i, 1);
-            delete binsById[id];
-          }
+      removeFromBin(point, bin);
+      if (bin.length == 0) {
+        var i = bins.indexOf(bin);
+        if (i > -1) {
+          bins.splice(i, 1);
+          delete binsById[id];
         }
       }
     }

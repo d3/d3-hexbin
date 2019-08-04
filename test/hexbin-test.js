@@ -227,6 +227,10 @@ tape("hexbin.removeAll() removes unbinned points", function(test) {
   var hexbin = d3.hexbin().addAll(points).removeAll(points.slice(0,2)),
     expected = [[[2,2]]];
   test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
+  hexbin = d3.hexbin();
+  hexbin(points)
+  hexbin.removeAll(points.slice(0,2));
+  test.equal(JSON.stringify(hexbin()), JSON.stringify(expected));
   test.end();
 });
 
