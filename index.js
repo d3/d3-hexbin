@@ -1,1 +1,1 @@
-export {default as hexbin} from "./src/hexbin";
+export {default as hexbin} from "./src/hexbin.js";
