@@ -46,7 +46,7 @@ You could display a hexagon for each non-empty bin as follows:
 svg.selectAll("path")
   .data(hexbin(points))
   .enter().append("path")
-    .attr("d", function(d) { return "M" + d.x + "," + d.y + hexbin.hexagon(); });
+    .attr("d", function(d) { return hexbin.hexagon([d.x, d.y]); });
 ```
 
 Alternatively, using a transform:
@@ -77,9 +77,9 @@ Removes the *point*, and returns the hexbin generator. Empty bins are pruned.
 
 Removes all the *points* and returns the hexbin generator. Empty bins are pruned.
 
-<a name="hexbin_hexagon" href="#hexbin_hexagon">#</a> <i>hexbin</i>.<b>hexagon</b>([<i>radius</i>])
+<a name="hexbin_hexagon" href="#hexbin_hexagon">#</a> <i>hexbin</i>.<b>hexagon</b>([<i>radius</i>][, <i>translate</i>])
 
-Returns the SVG path string for the hexagon centered at the origin ⟨0,0⟩. The path string is defined with relative coordinates such that you can easily translate the hexagon to the desired position. If *radius* is not specified, the hexbin’s [current radius](#hexbin_radius) is used. If *radius* is specified, a hexagon with the specified radius is returned; this is useful for area-encoded bivariate hexbins.
+Returns the SVG path string for the hexagon centered at the origin ⟨0,0⟩. If *translate* is specified, the path is translated. Otherwise, the path string is defined with relative coordinates. If *radius* is not specified, the hexbin’s [current radius](#hexbin_radius) is used. If *radius* is specified, a hexagon with the specified radius is returned; this is useful for area-encoded bivariate hexbins.
 
 <a name="hexbin_centers" href="#hexbin_centers">#</a> <i>hexbin</i>.<b>centers</b>()
 
