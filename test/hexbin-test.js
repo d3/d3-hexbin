@@ -199,7 +199,7 @@ tape("hexbin.remove() doesn't remove a point that isn't there", function(test) {
   test.end();
 });
 
-tape("hexbin.removeAll() removes several points", function(test) {
+tape("hexbin.removeAll() removes several points (method 1)", function(test) {
   var points = [[0,0], [1,1], [2,2]];
   var hexbin = d3.hexbin(),
     expected = [[[2,2]]];
@@ -209,7 +209,7 @@ tape("hexbin.removeAll() removes several points", function(test) {
   test.end();
 });
 
-tape("hexbin.removeAll() removes unbinned points", function(test) {
+tape("hexbin.removeAll() removes several points (method 2)", function(test) {
   var points = [[0,0], [1,1], [2,2]];
   var hexbin = d3.hexbin().addAll(points).removeAll(points.slice(0,2)),
     expected = [[[2,2]]];

@@ -26,9 +26,7 @@ export default function() {
       sa = 0,
       context = null,
       binsById = {},
-      bins = [],
-      unbinned = [],
-      dirty = false;
+      bins = [];
 
   // from pixels to grid
   function transform(x, y) {
@@ -48,20 +46,8 @@ export default function() {
     if (points) {
       binsById = {};
       bins.splice(0, bins.length);
-      unbinned.splice(0, unbinned.length);
       addAll(points);
-    } else if (dirty) {
-      bins.forEach(function(bin) {
-        bin.forEach(function(d) {
-          unbinned.push(d);
-        });
-      });
-      binsById = {};
-      bins.splice(0, bins.length);
     }
-    addAll(unbinned);
-    unbinned.splice(0, unbinned.length);
-    dirty = false;
     return bins;
   }
 
@@ -117,7 +103,6 @@ export default function() {
     if (isNaN(px = +x.call(null, point))
         || isNaN(py = +y.call(null, point))) return;
     var b = getBin(px, py), id = b[0] + "-" + b[1], bin = binsById[id];
-    removeFromBin(point, unbinned);
     if (bin) {
       removeFromBin(point, bin);
       if (bin.length == 0) {
@@ -201,23 +186,23 @@ export default function() {
   };
 
   hexbin.angle = function(_) {
-    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), dirty = true, hexbin) : angle;
+    return arguments.length ? (angle = _, ca = Math.cos(angle * Math.PI/180), sa =  Math.sin(angle * Math.PI/180), hexbin) : angle;
   };
 
   hexbin.translate = function(_) {
-    return arguments.length ? (tx = _[0], ty = _[1], dirty = true, hexbin) : [tx, ty];
+    return arguments.length ? (tx = _[0], ty = _[1], hexbin) : [tx, ty];
   };
 
   hexbin.x = function(_) {
-    return arguments.length ? (x = _, dirty = true, hexbin) : x;
+    return arguments.length ? (x = _, hexbin) : x;
   };
 
   hexbin.y = function(_) {
-    return arguments.length ? (y = _, dirty = true, hexbin) : y;
+    return arguments.length ? (y = _, hexbin) : y;
   };
 
   hexbin.radius = function(_) {
-    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, dirty = true, hexbin) : r;
+    return arguments.length ? (r = +_, dx = r * 2 * Math.sin(thirdPi), dy = r * 1.5, hexbin) : r;
   };
 
   hexbin.size = function(_) {
@@ -247,16 +232,15 @@ export default function() {
   }
 
   hexbin.add = function(point) {
-    unbinned.push(point);
-    dirty = true;
+    var px, py;
+    if (!isNaN(px = +x.call(null, point, 0, [point]))
+    && !isNaN(py = +y.call(null, point, 0, [point])))
+      addOne(point, px, py);
     return hexbin;
   }
 
   hexbin.addAll = function(points) {
-    points.forEach(function(point) {
-      unbinned.push(point);
-    });
-    dirty = true;
+    points.forEach(hexbin.add);
     return hexbin;
   }
 
@@ -266,7 +250,7 @@ export default function() {
   }
 
   hexbin.removeAll = function(points) {
-    for (var i = 0, l = points.length; i < l; i++) remove(points[i]);
+    points.forEach(remove);
     return hexbin;
   }
 
