@@ -82,6 +82,7 @@ export default function() {
   }
 
   function addAll(points) {
+    points = Array.from(points);
     var i, point, px, py, n = points.length;
 
     for (i = 0; i < n; ++i) {
@@ -240,7 +241,7 @@ export default function() {
   }
 
   hexbin.addAll = function(points) {
-    points.forEach(hexbin.add);
+    Array.from(points).forEach(hexbin.add);
     return hexbin;
   }
 
@@ -250,7 +251,7 @@ export default function() {
   }
 
   hexbin.removeAll = function(points) {
-    points.forEach(remove);
+    Array.from(points).forEach(remove);
     return hexbin;
   }
 

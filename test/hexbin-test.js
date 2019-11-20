@@ -34,6 +34,37 @@ tape("hexbin(points) bins the specified points into hexagonal bins", function(te
   test.end();
 });
 
+tape("hexbin(points) accepts iterators", function(test) {
+  var bin = d3.hexbin(),
+    a = [0, 0], b = [0, 1],
+    bins = bin(new Set([
+    a, b, [0, 2],
+    [1, 0], [1, 1], [1, 2],
+    [2, 0], [2, 1], [2, 2]
+  ]));
+  test.deepEqual(noxy(bins), [
+    [[0, 0]],
+    [[0, 1], [0, 2], [1, 1], [1, 2]],
+    [[1, 0], [2, 0]],
+    [[2, 1], [2, 2]]
+  ]);
+  bin.removeAll(new Set([a, b]));
+  test.deepEqual(noxy(bins), [
+    [[0, 2], [1, 1], [1, 2]],
+    [[1, 0], [2, 0]],
+    [[2, 1], [2, 2]]
+  ]);
+  bin.addAll(new Set([a, b]));
+  test.deepEqual(noxy(bins), [
+    [[0, 2], [1, 1], [1, 2], [0, 1]],
+    [[1, 0], [2, 0]],
+    [[2, 1], [2, 2]],
+    [[0, 0]],
+  ]);
+  
+  test.end();
+});
+
 tape("hexbin(points) observes the current x- and y-accessors", function(test) {
   var x = function(d) { return d.x; },
       y = function(d) { return d.y; },
