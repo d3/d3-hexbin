@@ -30,8 +30,8 @@ export default function() {
       var point,
           px,
           py,
-          pj = Math.round(py = py / dy),
-          pi = Math.round(px = px / dx - (pj & 1) / 2),
+          pj = py = py / dy,
+          pi = px = px / dx - (pj & 1) / 2,
           py1 = py - pj;
 
       if (Math.abs(py1) * 3 > 1) {
