@@ -5,6 +5,9 @@ var width = 960,
     Canvas = require("canvas"),
     d3 = require("../");
 
+// canvas@2 compatibility check
+if (Canvas.Canvas) Canvas = Canvas.Canvas;
+
 var canvas = new Canvas(width, height),
     context = canvas.getContext("2d");
 
