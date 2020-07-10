@@ -17,7 +17,7 @@ var hexbin = d3.hexbin();
 </script>
 ```
 
-[Try d3-hexbin in your browser.](https://tonicdev.com/npm/d3-hexbin)
+[Try d3-hexbin in your browser.](https://observablehq.com/collection/@d3/d3-hexbin)
 
 ## API Reference
 
