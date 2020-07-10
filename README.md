@@ -9,7 +9,7 @@ Hexagonal binning is useful for aggregating data into a coarser representation f
 If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release](https://github.com/d3/d3-hexbin/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-hexbin.v0.2.min.js). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_hexbin` global is exported:
 
 ```html
-<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+<script src="https://d3js.org/d3-hexbin.v1.min.js"></script>
 <script>
 
 var hexbin = d3.hexbin();
