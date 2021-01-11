@@ -46,7 +46,7 @@ You could display a hexagon for each non-empty bin as follows:
 svg.selectAll("path")
   .data(hexbin(points))
   .enter().append("path")
-    .attr("d", (d) => "M" + d.x + "," + d.y + hexbin.hexagon());
+    .attr("d", d => `M${d.x},${d.y}${hexbin.hexagon()}`);
 ```
 
 Alternatively, using a transform:
