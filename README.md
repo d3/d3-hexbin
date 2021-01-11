@@ -55,7 +55,7 @@ Alternatively, using a transform:
 svg.selectAll("path")
   .data(hexbin(points))
   .enter().append("path")
-    .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")")
+    .attr("transform", d => `translate(${d.x},${d.y})`)
     .attr("d", hexbin.hexagon());
 ```
 
