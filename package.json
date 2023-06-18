@@ -30,11 +30,12 @@
   "scripts": {
     "pretest": "rollup -c",
     "test": "tape 'test/**/*-test.js' && eslint src test",
-    "prepublishOnly": "rm -rf dist && yarn test",
+    "prepublishOnly": "rm -rf dist && yarn test && mkdir -p test/output && test/compare-images",
     "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../${npm_package_name}/dist/${npm_package_name}.js ${npm_package_name}.v${npm_package_version%%.*}.js && cp ../${npm_package_name}/dist/${npm_package_name}.min.js ${npm_package_name}.v${npm_package_version%%.*}.min.js && git add ${npm_package_name}.v${npm_package_version%%.*}.js ${npm_package_name}.v${npm_package_version%%.*}.min.js && git commit -m \"${npm_package_name} ${npm_package_version}\" && git push && cd - && zip -j dist/${npm_package_name}.zip -- LICENSE README.md dist/${npm_package_name}.js dist/${npm_package_name}.min.js"
   },
   "sideEffects": false,
   "devDependencies": {
+    "canvas": "1 - 2",
     "eslint": "6",
     "rollup": "1",
     "rollup-plugin-terser": "5",
