@@ -12,12 +12,12 @@ If you use NPM, `npm install d3-hexbin`. Otherwise, download the [latest release
 <script src="https://d3js.org/d3-hexbin.v1.min.js"></script>
 <script>
 
-var hexbin = d3.hexbin();
+const hexbin = d3.hexbin();
 
 </script>
 ```
 
-[Try d3-hexbin in your browser.](https://tonicdev.com/npm/d3-hexbin)
+[Try d3-hexbin in your browser.](https://observablehq.com/collection/@d3/d3-hexbin)
 
 ## API Reference
 
@@ -37,7 +37,7 @@ Each bin in the returned array is an array containing the bin’s points. Only n
 These *x*- and *y*-coordinates of the hexagon center can be used to render the hexagon at the appropriate location in conjunction with [*hexbin*.hexagon](#hexbin_hexagon). For example, given a hexbin generator:
 
 ```js
-var hexbin = d3.hexbin();
+const hexbin = d3.hexbin();
 ```
 
 You could display a hexagon for each non-empty bin as follows:
@@ -46,7 +46,7 @@ You could display a hexagon for each non-empty bin as follows:
 svg.selectAll("path")
   .data(hexbin(points))
   .enter().append("path")
-    .attr("d", function(d) { return hexbin.hexagon([d.x, d.y]); });
+    .attr("d", (d) => hexbin.hexagon([d.x, d.y]));
 ```
 
 Alternatively, using a transform:
@@ -55,7 +55,7 @@ Alternatively, using a transform:
 svg.selectAll("path")
   .data(hexbin(points))
   .enter().append("path")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("transform", d => `translate(${d.x},${d.y})`)
     .attr("d", hexbin.hexagon());
 ```
 
